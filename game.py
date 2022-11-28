@@ -5,7 +5,7 @@ import pygame
 import os
 import random
 
-from classes import Player, Enemy, Boss, Supply
+from classes import PlayerShip, EnemyShip, BossShip, Supply
 from settings import WIN, BG, get_font, WIDTH, HEIGHT, collide
 
 
@@ -26,7 +26,7 @@ class Game:
         self.supplies_amount = 2
         self.supply_types = ['damage', 'hp', 'shoot']
 
-        self.player = Player(300, 630, "yellow")
+        self.player = PlayerShip(300, 630, "yellow")
         self.clock = pygame.time.Clock()
 
         self.lost = False
@@ -132,9 +132,9 @@ class Game:
                     wave_length = 1
                 else:
                     if self.level == 6:
-                        wave_length = 1
+                        wave_length = 17
                     else:
-                        wave_length = random.randint(1, 2)
+                        wave_length = random.randint(10, 12)
 
                 if self.level != "W" and self.level % 3 == 0:
                     self.supplies_amount += 1
@@ -156,15 +156,15 @@ class Game:
 
                 if self.level != 7:
                     for _ in range(wave_length):
-                        enemy = Enemy(random.randrange(100, WIDTH-100), random.randrange(-1100, -100),
+                        enemy = EnemyShip(random.randrange(100, WIDTH-100), random.randrange(-1100, -100),
                                       random.choice(current_enemies))
                         self.enemies.append(enemy)
                 else:
                     if self.won:
                         self.enemies = []
                     else:
-                        enemy = Boss(random.randrange(200, WIDTH-200), random.randrange(-500, -400),
-                                 random.choice(current_enemies))
+                        enemy = BossShip(random.randrange(200, WIDTH-200), random.randrange(-500, -400),
+                                     random.choice(current_enemies))
                         self.enemies.append(enemy)
 
                 for _ in range(self.supplies_amount):

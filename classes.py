@@ -1,4 +1,5 @@
 import pygame
+from typing import List
 from abc import ABC, abstractmethod
 
 from settings import collide, DAMAGE, HP, SHOOTING_VEL, RED_SPACE_SHIP, RED_LASER, GREEN_SPACE_SHIP, GREEN_LASER, \
@@ -38,7 +39,7 @@ class BossLaser(Laser):
         self.x += self.x_vel
 
 
-class Supply(ABC):
+class Supply:
     TYPES = {"damage": DAMAGE, "hp": HP, "shoot": SHOOTING_VEL}
 
     def __init__(self, x, y, type_):
@@ -61,7 +62,7 @@ class Supply(ABC):
     def collision(self, obj):
         return collide(self, obj)
 
-    def action(self, obj: "Player"):
+    def action(self, obj: "PlayerShip"):
         if self.type_ == "damage":
             obj.damage += 5
         elif self.type_ == 'hp':
@@ -94,7 +95,7 @@ class Ship(ABC):
         self.y = y
         self.health = self.COLOR_MAP[color][-1]
         self.max_health = self.health
-        self.lasers = []
+        self.lasers: List[Laser] = []
         self.cool_down_counter = 0
         self.color = color
         self.ship_img, self.laser_img, self.vel, self.cool_down_rate, self.damage, _ = self.COLOR_MAP[color]
@@ -139,11 +140,10 @@ class Ship(ABC):
         return self.ship_img.get_height()
 
 
-class Player(Ship):
+class PlayerShip(Ship):
 
     def __init__(self, x, y, color):
         super().__init__(x, y, color)
-        self.mask = pygame.mask.from_surface(self.ship_img)
         self.points = 0
 
     def move_lasers(self, objs):
@@ -169,7 +169,7 @@ class Player(Ship):
                                                self.ship_img.get_width() * (self.health / self.max_health), 10))
 
 
-class Enemy(Ship):
+class EnemyShip(Ship):
 
     def __init__(self, x, y, color):
         super().__init__(x, y, color)
@@ -193,7 +193,7 @@ class Enemy(Ship):
                                                self.ship_img.get_width() * (self.health / self.max_health), 10))
 
 
-class Boss(Enemy):
+class BossShip(EnemyShip):
     def __init__(self, x, y, color):
         super().__init__(x, y, color)
         self.x_vel = self.vel

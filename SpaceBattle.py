@@ -72,7 +72,7 @@ def top():
 
         top_list = get_top()
         for i, j in enumerate(zip(reversed(top_list), range(230, 680, 40)), 1):
-            TEXT = get_font(30).render(f"{i}.     {j[0]:7}", True, "White")
+            TEXT = get_font(30).render(f"{i:2}.     {j[0]:7}", True, "White")
             RECT = TEXT.get_rect(center=(375, j[1]))
             WIN.blit(TEXT, RECT)
 
